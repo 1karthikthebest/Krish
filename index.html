@@ -116,6 +116,32 @@
             animation: pulse-krish 1.5s infinite ease-in-out;
             text-shadow: 0 0 20px rgba(99, 102, 241, 0.7); /* subtle glow */
         }
+        /* Custom modal transition styles */
+        .modal-enter {
+            opacity: 0;
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transition: opacity 300ms ease-out;
+        }
+        .modal-exit {
+            opacity: 1;
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transition: opacity 300ms ease-in;
+        }
+        .modal-content-enter {
+            transform: scale(0.9);
+        }
+        .modal-content-enter-active {
+            transform: scale(1);
+            transition: transform 300ms ease-out;
+        }
+        .modal-content-exit-active {
+            transform: scale(0.9);
+            transition: transform 300ms ease-in;
+        }
     </style>
 </head>
 <!-- Initial Background is blue-black gradient --><body class="min-h-screen flex flex-col text-white bg-gradient-to-br from-gray-900 to-blue-900">
@@ -136,9 +162,30 @@
                     Features
                 </a>
 
-                <!-- Active Login Button (Top Right) --><button id="login-button" class="px-5 py-2 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-xl hover:bg-indigo-700 transition duration-300 transform hover:scale-105 active:scale-95">
-                    Login
-                </button>
+                <!-- Login Button and Settings Dropdown Container -->
+                <div class="flex items-center space-x-3 relative">
+                    <!-- Active Login Button (Top Right) --><button id="login-button" class="px-5 py-2 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-xl hover:bg-indigo-700 transition duration-300 transform hover:scale-105 active:scale-95">
+                        Login
+                    </button>
+                    
+                    <!-- START: Settings Menu Integration -->
+                    <div class="relative">
+                        <button id="settingsButton" aria-label="Settings" class="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <!-- SVG for 3 vertical dots (ellipsis) -->
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div id="settingsDropdown" class="absolute right-0 mt-2 w-40 bg-gray-900 border border-indigo-700/50 rounded-lg shadow-2xl py-1 transform origin-top-right scale-0 transition duration-100 ease-out z-50 pointer-events-none">
+                            <a href="#" id="aboutUsLink" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-indigo-400 transition duration-150 ease-in-out rounded-lg">
+                                About Us
+                            </a>
+                        </div>
+                    </div>
+                    <!-- END: Settings Menu Integration -->
+                </div>
             </div>
         </nav>
     </header>
@@ -357,505 +404,440 @@
                     </div>
                     <div id="settings-content" class="flex-grow overflow-y-auto p-4 md:p-8 space-y-8">
                         
-                        <!-- Profile Settings -->
-                        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-indigo-700/50">
-                            <h3 class="text-xl font-bold text-indigo-400 mb-4 text-center">Profile</h3>
-
-                            <!-- Dynamic Avatar -->
-                            <div id="profile-avatar" class="user-avatar profile-avatar mb-6">?</div>
-
-                            <h3 class="text-lg font-semibold text-center text-white mb-6" id="settings-display-name">Guest</h3>
-                            
-                            <div class="space-y-4">
-                                
-                                <!-- Admin ID -->
-                                <div class="flex items-center justify-between border-b border-gray-700 pb-3">
-                                    <label class="text-gray-300">Admin ID</label>
-                                    <span class="text-sm text-red-400 font-mono" id="settings-admin-id">---</span>
+                        <!-- BOX 1: My Profile -->
+                        <div class="bg-gray-800 rounded-xl p-6 shadow-2xl border border-indigo-700/50">
+                            <h2 class="text-xl font-bold text-indigo-400 mb-4 border-b border-gray-700 pb-2">My Profile</h2>
+                            <div class="flex items-center space-x-4 mb-4">
+                                <div class="profile-avatar user-avatar">K</div>
+                                <div>
+                                    <p class="text-2xl font-bold text-white">Karthik</p>
+                                    <p class="text-sm text-green-400">Online</p>
                                 </div>
-
-                                <!-- Occupation -->
-                                <div class="flex items-center justify-between border-b border-gray-700 pb-3">
-                                    <label class="text-gray-300">Occupation</label>
-                                    <span class="text-white font-medium text-right" id="settings-occupation">---</span>
-                                </div>
-
-                                <!-- Level -->
-                                <div class="flex items-center justify-between pb-3">
-                                    <label class="text-gray-300">Level</label>
-                                    <span class="text-green-400 font-medium text-right" id="settings-level">---</span>
-                                </div>
-                                
-                                <!-- Change Password -->
-                                <button class="w-full py-2 bg-indigo-600/70 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300">
-                                    Change Password (Mock)
-                                </button>
                             </div>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Role:</span>
+                                    <span class="text-white font-medium">Student, C3B</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">User ID:</span>
+                                    <span class="text-white font-medium break-all">1769584</span>
+                                </div>
+                            </div>
+                            <button class="mt-4 w-full py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-indigo-600 hover:text-white transition">Edit Profile</button>
                         </div>
 
-                        <!-- Appearance Settings -->
-                        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-green-700/50">
-                            <h3 class="text-xl font-bold text-green-400 mb-4">Appearance</h3>
-                            <div class="space-y-4">
-
-                                <!-- Dark Mode Toggle -->
-                                <div class="flex items-center justify-between">
-                                    <label class="text-gray-300">Dark Mode (Default)</label>
-                                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                                        <!-- Mock Toggle Switch (Always ON for this app) -->
-                                        <input type="checkbox" name="toggle" id="darkModeToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer checked:right-0 checked:bg-green-500 checked:border-green-500" checked disabled>
-                                        <label for="darkModeToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-600 cursor-pointer"></label>
-                                    </div>
-                                </div>
-
-                                <!-- Notification Sounds Toggle -->
-                                <div class="flex items-center justify-between">
-                                    <label class="text-gray-300">Notification Sounds</label>
-                                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                                        <!-- Mock Toggle Switch -->
-                                        <input type="checkbox" name="toggle" id="soundToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked>
-                                        <label for="soundToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-600 cursor-pointer"></label>
-                                    </div>
+                        <!-- BOX 2: No Threats / Security Status -->
+                        <div class="bg-gray-800 rounded-xl p-6 shadow-2xl border border-green-700/50">
+                            <h2 class="text-xl font-bold text-green-400 mb-4 border-b border-gray-700 pb-2">Threat Analysis</h2>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-4xl text-green-500">✅</span>
+                                <div>
+                                    <p class="text-lg font-semibold text-white">No Threats Detected</p>
+                                    <p class="text-sm text-gray-400">System health is optimal. All security protocols are active and operational.</p>
                                 </div>
                             </div>
+                            <button class="mt-4 py-1 px-4 bg-gray-700 text-gray-300 text-sm rounded-full hover:bg-green-600 hover:text-white transition">Run Manual Scan</button>
                         </div>
 
-                        <!-- System & Security -->
-                        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-red-700/50">
-                            <h3 class="text-xl font-bold text-red-400 mb-4">System & Data</h3>
-                            <div class="space-y-4">
-                                
-                                <!-- Two-Factor Authentication Status -->
-                                <div class="flex items-center justify-between border-b border-gray-700 pb-3">
-                                    <label class="text-gray-300">Two-Factor Auth</label>
-                                    <span class="text-green-500 font-bold">Enabled (Mock)</span>
-                                </div>
-                                
-                                <!-- Logout All Devices -->
-                                <button class="w-full py-2 bg-red-600/70 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300">
-                                    Logout All Devices (Mock)
-                                </button>
-
-                                <!-- Clear Local Cache -->
-                                <button class="w-full py-2 border border-gray-600 text-gray-400 font-semibold rounded-lg hover:bg-gray-700 transition duration-300">
-                                    Clear Local Cache (Mock)
-                                </button>
-                            </div>
+                        <!-- BOX 3: About System and Data -->
+                        <div class="bg-gray-800 rounded-xl p-6 shadow-2xl border border-indigo-700/50">
+                            <h2 class="text-xl font-bold text-indigo-400 mb-4 border-b border-gray-700 pb-2">System & Data Policy</h2>
+                            <p class="text-sm text-gray-300 mb-3">KRISH is a closed-loop system designed for secure, high-stakes communication and resource management.</p>
+                            <ul class="text-sm space-y-2 text-gray-400">
+                                <li class="flex items-start">
+                                    <span class="text-green-400 mr-2 mt-0.5">🔹</span>
+                                    <span>All chat data is encrypted end-to-end and stored locally on secure servers.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-400 mr-2 mt-0.5">🔹</span>
+                                    <span>User metadata is anonymized for performance tracking only.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-400 mr-2 mt-0.5">🔹</span>
+                                    <span>No third-party data sharing is permitted under the KRISH charter.</span>
+                                </li>
+                            </ul>
                         </div>
 
                     </div>
                 </div>
-                
             </div>
         </section>
 
     </div>
+    
+    <!-- About Us Modal (Hidden by default - same styling as app content) -->
+    <div id="aboutUsModal" class="fixed inset-0 bg-gray-900/90 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 opacity-0 pointer-events-none modal-enter">
+        <div class="bg-gray-800 rounded-xl shadow-2xl w-11/12 max-w-md p-6 m-4 border border-indigo-500/50 transform scale-90 transition-transform duration-300">
+            
+            <div class="flex justify-between items-start border-b border-gray-700 pb-3 mb-4">
+                <h3 class="text-2xl font-bold text-indigo-400">About the Admin</h3>
+                <button id="closeModalButton" aria-label="Close" class="text-gray-400 hover:text-white transition">
+                    <!-- Close (X) Icon -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
 
-    <!-- Application Logic (All Client-Side) -->
+            <!-- Admin Details -->
+            <div class="space-y-3 text-left">
+                <div class="flex justify-between items-center py-2 border-b border-gray-700">
+                    <span class="font-semibold text-gray-300">Owned/Admin Name:</span>
+                    <span class="font-medium text-green-400">Karthik</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-700">
+                    <span class="font-semibold text-gray-300">Occupation:</span>
+                    <span class="font-medium text-green-400">Student, C3B</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                    <span class="font-semibold text-gray-300">Admin ID:</span>
+                    <span class="font-medium text-green-400">1769584</span>
+                </div>
+            </div>
+
+            <p class="mt-6 text-sm text-gray-500 italic text-center">
+                This application is managed for advanced team collaboration.
+            </p>
+
+        </div>
+    </div>
+
+
     <script>
-        // --- UI ELEMENT REFERENCES ---
-        const loginBtn = document.getElementById('login-button');
-        const appHeader = document.getElementById('app-header');
-        const landingContent = document.getElementById('landing-content');
-        const loginFormContainer = document.getElementById('login-form-container');
-        const goBackBtn = document.getElementById('go-back-button');
-        const loggedInUsernameEl = document.getElementById('logged-in-username');
+        // --- Core State and App Management ---
+        const VIEWS = {
+            LANDING: 'landing-content',
+            LOGIN: 'login-form-container',
+            CHAT_APP: 'chat-app-container'
+        };
 
-        // Login Logic Elements
+        let currentView = VIEWS.LANDING;
+        let isLoggedIn = false;
+
+        // --- DOM References ---
+        const landingContent = document.getElementById(VIEWS.LANDING);
+        const loginFormContainer = document.getElementById(VIEWS.LOGIN);
+        const chatAppContainer = document.getElementById(VIEWS.CHAT_APP);
+        const loginButton = document.getElementById('login-button');
+        const goBackButton = document.getElementById('go-back-button');
         const loginForm = document.getElementById('login-form');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
         const loginMessage = document.getElementById('login-message');
-        
-        // Loading Overlay
         const loadingOverlay = document.getElementById('loading-overlay');
-
-        // Chat App Elements
-        const chatAppContainer = document.getElementById('chat-app-container');
-        const messagesContainer = document.getElementById('messages-container');
-        const messageForm = document.getElementById('message-form');
-        const messageInput = document.getElementById('message-input');
-        const currentChannelNameEl = document.getElementById('current-channel-name');
-        const logoutButton = document.getElementById('logout-button');
-
-        // View Elements and Sidebar Items
-        const chatView = document.getElementById('chat-view');
-        const teamView = document.getElementById('team-view');
-        const activityView = document.getElementById('activity-view');
-        const settingsView = document.getElementById('settings-view');
-        const sidebarItems = document.querySelectorAll('#sidebar-nav .sidebar-item');
-
-        // Settings Elements for dynamic update
-        const profileAvatarEl = document.getElementById('profile-avatar');
-        const settingsDisplayNameEl = document.getElementById('settings-display-name');
-        const settingsAdminIdEl = document.getElementById('settings-admin-id'); 
-        const settingsOccupationEl = document.getElementById('settings-occupation'); 
-        const settingsLevelEl = document.getElementById('settings-level'); 
-
-        // --- STATE MANAGEMENT ---
-        const CHANNEL_AI = "K-Channel";
-        let currentChannelName = "Command Channel";
-        // Simple chat history storage for each channel
-        const chatHistory = {
-            "Command Channel": [{ role: 'ai', text: 'Welcome to the Command Console. Please authenticate using the login button to begin operations.' }],
-            // UPDATED INITIAL MESSAGE with line breaks (\n)
-            [CHANNEL_AI]: [{ role: 'ai', text: 'K-Channel AI is currently offline due to maintenance.\nI can only provide mock responses.\nAdvice KRISH System: The previous message is OK.' }],
-            "R-Channel": []
-        };
+        const body = document.body;
         
-        // --- AUTH/DISPLAY CONSTANTS (MOCK DATA) ---
-        const USER_PROFILES = {
-            '1karthikthebest': { 
-                username: '1karthikthebest', 
-                password: '9620373944', 
-                displayName: 'KING KRISH', 
-                adminId: '1769584',
-                occupation: 'student, C3B', 
-                level: 'owner, admin, commander'
-            },
-            'ADMIN_KRISH': { username: 'ADMIN_KRISH', password: '1769584', displayName: 'ADMIN', adminId: '0000000', occupation: 'System Operator', level: 'admin' }
-        };
-        let currentProfile = null;
+        // Settings Menu Elements (New)
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsDropdown = document.getElementById('settingsDropdown');
+        const aboutUsLink = document.getElementById('aboutUsLink');
+        const aboutUsModal = document.getElementById('aboutUsModal');
+        const closeModalButton = document.getElementById('closeModalButton');
+        
+        let isDropdownOpen = false; // State for the settings dropdown
 
+        // --- Utility Functions ---
 
-        // --- UTILITY FUNCTIONS ---
+        /** Updates the primary view state and handles transitions. */
+        function setView(newView) {
+            currentView = newView;
 
-        // Function to get initials from a display name
-        const getInitials = (name) => {
-            if (!name) return '?';
-            const parts = name.split(/\s+/).filter(Boolean); 
-            if (parts.length > 1) {
-                return parts[0][0] + parts[parts.length - 1][0];
-            } else if (parts.length === 1) {
-                return parts[0].substring(0, 2);
-            }
-            return '?';
-        };
-
-        // Function to display a message
-        const displayMessage = (role, text) => {
-            const messageEl = document.createElement('div');
-            // Using the .message-bubble CSS style with reduced margin-bottom
-            messageEl.className = `message-bubble ${role === 'user' ? 'user-message self-end' : 'ai-message self-start'}`;
-            
-            // REMOVED 'pt-1' from the paragraph to reduce spacing
-            messageEl.innerHTML = `
-                <div class="text-xs ${role === 'user' ? 'text-right' : 'text-left'} text-gray-300 font-medium">${role === 'user' ? currentProfile.displayName : 'KRISH System'} · Now</div>
-                <p class="text-base mt-0">${text}</p> 
-            `;
-
-            messagesContainer.appendChild(messageEl);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        };
-
-        // Function to load chat history for the current channel
-        const loadChannel = (channelName) => {
-            messagesContainer.innerHTML = '';
-            const history = chatHistory[channelName] || [];
-            
-            history.forEach(msg => {
-                displayMessage(msg.role, msg.text);
+            // 1. Hide all main containers
+            [landingContent, loginFormContainer, chatAppContainer].forEach(el => {
+                el.classList.add('opacity-0', 'pointer-events-none', 'hidden');
+                el.classList.remove('translate-y-0', 'translate-y-full'); // Reset transitions
             });
 
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            // 2. Determine which container to show
+            const targetContainer = document.getElementById(newView);
+            if (!targetContainer) return;
+
+            // 3. Apply unique transformations/styles for visibility
+            setTimeout(() => {
+                targetContainer.classList.remove('hidden');
+                
+                // Animate based on the view
+                if (newView === VIEWS.LOGIN) {
+                    targetContainer.classList.add('translate-y-0');
+                } else {
+                    targetContainer.classList.remove('translate-y-full');
+                }
+
+                // Show the container
+                setTimeout(() => {
+                    targetContainer.classList.remove('opacity-0', 'pointer-events-none');
+                }, 10); // Small delay to allow 'hidden' removal to register
+            }, newView === VIEWS.CHAT_APP ? 1000 : 10); // Longer delay for full app launch
         }
 
-        // --- CORE UI STATE FUNCTIONS ---
-
-        // Logic to transition from Landing Page to Login Form (ROBUST FIX)
-        const showLoginForm = () => {
-            // 1. Start fading out landing content
-            landingContent.classList.remove('opacity-100');
-            landingContent.classList.add('opacity-0', 'pointer-events-none');
+        /** Handles application launch after a mock login. */
+        function launchApp() {
+            isLoggedIn = true;
             
-            // 2. Make the login container visible in the layout but keep it invisible/off-screen
-            loginFormContainer.classList.remove('hidden');
-            loginFormContainer.classList.remove('pointer-events-none'); // Make it interactive
-            
-            // --- CRITICAL: FORCE REFLOW (Browser registers that 'hidden' is gone) ---
-            loginFormContainer.offsetHeight; 
+            // Change background immediately
+            body.classList.remove('from-gray-900', 'to-blue-900');
+            body.classList.add('bg-gray-800'); // Solid dark background for the app
 
-            // 3. Trigger the full CSS transition (fade-in and slide-up)
-            loginFormContainer.classList.remove('opacity-0', 'translate-y-full');
-            loginFormContainer.classList.add('opacity-100');
+            // Hide header/nav links which are now managed by the in-app header
+            document.getElementById('nav-links').style.display = 'none';
 
-            // 4. Cleanup
-            loginMessage.classList.remove('opacity-100', 'text-green-400', 'text-red-400');
-            loginMessage.textContent = '';
-            loginForm.reset();
-
-            // 5. Finally, hide the landing content completely after it's faded out
-            setTimeout(() => {
-                landingContent.classList.add('hidden');
-            }, 1000); // Wait for the 1s transition to finish
-        };
-
-        // Logic to transition from Login Form back to Landing Page
-        const showLandingPage = () => {
-            loginFormContainer.classList.remove('opacity-100');
-            loginFormContainer.classList.add('opacity-0', 'translate-y-full', 'pointer-events-none');
-
-            setTimeout(() => {
-                // Ensure form is completely hidden after transition
-                loginFormContainer.classList.add('hidden');
-                
-                // Show the landing content
-                landingContent.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-                landingContent.classList.add('opacity-100');
-            }, 1000); 
-        };
-        
-        // Function to start the loading animation sequence
-        const startLoadingTransition = () => {
-            // 1. Hide the login form completely
-            loginFormContainer.classList.remove('opacity-100');
-            loginFormContainer.classList.add('opacity-0', 'translate-y-full', 'pointer-events-none');
-
-            // 2. Show the loading overlay immediately and put it on top (z-40)
+            // Start the loading animation
             loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
-            loadingOverlay.classList.add('opacity-100');
             
-            // 3. Set a timer for the loading duration (2000ms for animation + 500ms fade)
-            const loadingDuration = 2000;
-            
+            // After 2 seconds, transition to the chat app
             setTimeout(() => {
-                // Start fading out the loader
-                loadingOverlay.classList.remove('opacity-100');
-                loadingOverlay.classList.add('opacity-0');
+                loadingOverlay.classList.add('opacity-0', 'pointer-events-none');
+                setView(VIEWS.CHAT_APP);
+            }, 2000); 
+        }
 
-                // After the fade-out duration (500ms from CSS transition), show the chat app
-                setTimeout(showChatApp, 500); 
-            }, loadingDuration);
-        };
+        // --- Settings Dropdown & Modal Logic (NEW) ---
 
-        // Logic to transition from Successful Login/Loading to Chat App
-        const showChatApp = () => {
-            if (!currentProfile) {
-                console.error("Attempted to show app without a profile.");
-                return;
-            }
-            
-            // 1. Hide the loading overlay completely after transition
-            loadingOverlay.classList.add('pointer-events-none');
-            loadingOverlay.classList.add('hidden'); // Ensure it's hidden after fade
-
-            // 2. Update the background, header visibility, and username
-            loggedInUsernameEl.textContent = currentProfile.displayName;
-            appHeader.classList.add('hidden'); // Hide the main header/logo
-            document.body.classList.remove('to-blue-900'); 
-            document.body.classList.add('to-green-900');
-
-            // 3. Update settings profile data dynamically
-            profileAvatarEl.textContent = getInitials(currentProfile.displayName); // Set Avatar Initials
-            settingsDisplayNameEl.textContent = currentProfile.displayName;
-            settingsAdminIdEl.textContent = currentProfile.adminId || 'N/A';
-            settingsOccupationEl.textContent = currentProfile.occupation || 'N/A';
-            settingsLevelEl.textContent = currentProfile.level || 'N/A';
-            
-            // 4. Show the main app container
-            chatAppContainer.classList.remove('hidden', 'opacity-0');
-            chatAppContainer.classList.add('opacity-100');
-            
-            // 5. Set the default active view and content
-            const defaultItem = document.querySelector('[data-channel-name="Command Channel"]');
-            switchAppView('chat-view', defaultItem);
-        };
-
-        // Logic to transition from Chat App back to Landing Page (Logout)
-        const logOut = () => {
-            currentProfile = null;
-            
-            chatAppContainer.classList.remove('opacity-100');
-            chatAppContainer.classList.add('opacity-0');
-
-            document.body.classList.remove('to-green-900');
-            document.body.classList.add('to-blue-900');
-
-            setTimeout(() => {
-                chatAppContainer.classList.add('hidden'); 
-                appHeader.classList.remove('hidden'); // SHOW HEADER AGAIN
-                
-                // Ensure landing content is visible before setting opacity to 1
-                landingContent.classList.remove('hidden', 'pointer-events-none'); 
-                landingContent.classList.add('opacity-100');
-                
-                // Reset settings placeholders
-                profileAvatarEl.textContent = '?';
-                settingsDisplayNameEl.textContent = 'Guest';
-                settingsAdminIdEl.textContent = '---';
-                settingsOccupationEl.textContent = '---';
-                settingsLevelEl.textContent = '---';
-                
-                // Re-initialize chat view to landing state
-                loadChannel("Command Channel");
-                
-            }, 1000); 
-        };
-
-        // --- HANDLERS ---
-
-        // Function to handle login submission validation (Mocked)
-        const handleLogin = (e) => {
-            e.preventDefault(); 
-
-            const enteredUsername = emailInput.value.trim();
-            const enteredPassword = passwordInput.value.trim();
-
-            loginMessage.classList.remove('opacity-100', 'text-green-400', 'text-red-400');
-            loginMessage.textContent = ''; 
-            currentProfile = null;
-
-            for (const key in USER_PROFILES) {
-                const profile = USER_PROFILES[key];
-                // Check against username and password
-                if (profile.username === enteredUsername && profile.password === enteredPassword) {
-                    currentProfile = profile;
-                    break;
-                }
-            }
-            
-            if (currentProfile) {
-                loginMessage.textContent = `SUCCESS: Authenticated as ${currentProfile.displayName}`;
-                loginMessage.classList.add('text-green-400', 'opacity-100');
-                
-                setTimeout(startLoadingTransition, 500); 
+        const toggleDropdown = () => {
+            isDropdownOpen = !isDropdownOpen;
+            if (isDropdownOpen) {
+                settingsDropdown.classList.remove('scale-0', 'pointer-events-none');
+                settingsDropdown.classList.add('scale-100');
             } else {
-                loginMessage.textContent = 'INCORRECT USERNAME OR PASSWORD';
-                loginMessage.classList.add('text-red-400', 'opacity-100');
+                settingsDropdown.classList.remove('scale-100');
+                settingsDropdown.classList.add('scale-0', 'pointer-events-none');
             }
         };
-        
-        // Function to handle message sending and mock responses (API removed)
-        const handleMessageSend = async (e) => {
-            e.preventDefault();
-            const messageText = messageInput.value.trim();
-            if (!messageText || !currentProfile) return;
+
+        const showModal = () => {
+            aboutUsModal.classList.remove('opacity-0', 'pointer-events-none');
+            aboutUsModal.classList.add('modal-enter-active');
             
-            // Disable input while processing
-            messageInput.disabled = true;
-            document.querySelector('#message-form button').disabled = true;
+            // Target the inner modal content for the scale effect
+            const content = aboutUsModal.querySelector('div');
+            content.classList.remove('scale-90', 'modal-content-exit-active');
+            content.classList.add('scale-100', 'modal-content-enter-active');
 
-            // 1. Display User Message
-            const userMsg = { role: 'user', text: messageText };
-            chatHistory[currentChannelName].push(userMsg);
-            displayMessage(userMsg.role, userMsg.text);
-            messageInput.value = '';
-
-            // 2. Generate Mock Response
-            let mockResponse;
-            if (currentChannelName === "Command Channel") {
-                mockResponse = `Command received: "${messageText}". **Command Console** executed successfully: System health check returned OK.`;
-            } else if (currentChannelName === CHANNEL_AI) {
-                // UPDATED MOCK RESPONSE with line breaks
-                mockResponse = `K-Channel AI is currently offline due to maintenance.\nI can only provide mock responses.\nAdvice KRISH System: The previous message is OK.\nYour query "${messageText}" has been logged for processing when I return.`;
-            } else if (currentChannelName === "R-Channel") {
-                mockResponse = `Message sent to R-Channel: "${messageText}". Relay confirmed. Waiting for team response...`;
-            } else {
-                mockResponse = `Mock response for channel ${currentChannelName}.`;
+            // Close dropdown immediately when modal opens
+            if (isDropdownOpen) {
+                toggleDropdown(); 
             }
+        };
 
-            // 3. Display AI Mock Response
+        const hideModal = () => {
+            aboutUsModal.classList.remove('modal-enter-active');
+            aboutUsModal.classList.add('opacity-0');
+            
+            const content = aboutUsModal.querySelector('div');
+            content.classList.remove('scale-100', 'modal-content-enter-active');
+            content.classList.add('scale-90', 'modal-content-exit-active');
+            
+            // Use timeout to ensure transition completes before disabling pointer events
             setTimeout(() => {
-                 const aiMsg = { role: 'ai', text: mockResponse };
-                 chatHistory[currentChannelName].push(aiMsg);
-                 displayMessage(aiMsg.role, aiMsg.text);
-
-                 // Re-enable input
-                messageInput.disabled = false;
-                document.querySelector('#message-form button').disabled = false;
-                messageInput.focus();
-            }, 1000);
-            
-            
+                 aboutUsModal.classList.add('pointer-events-none');
+            }, 300);
         };
 
-        // --- VIEW SWITCHING LOGIC ---
 
-        const switchAppView = (viewId, clickedItem) => {
-            const allViews = [chatView, teamView, activityView, settingsView];
+        // --- Event Handlers ---
+
+        document.addEventListener('DOMContentLoaded', () => {
             
-            // Hide all views
-            allViews.forEach(view => {
-                view.classList.add('hidden');
-                view.classList.remove('flex', 'flex-col');
+            // Initialize view to landing
+            setView(VIEWS.LANDING);
+
+            // 1. Landing to Login transition
+            loginButton.addEventListener('click', () => {
+                setView(VIEWS.LOGIN);
             });
 
-            // Deactivate all sidebar items
-            sidebarItems.forEach(item => item.classList.remove('active'));
+            // 2. Login to Landing (Go Back) transition
+            goBackButton.addEventListener('click', () => {
+                setView(VIEWS.LANDING);
+            });
 
-            // Show target view
-            const targetView = document.getElementById(viewId);
-            if (targetView) {
-                targetView.classList.remove('hidden');
-                targetView.classList.add('flex', 'flex-col');
+            // 3. Login attempt simulation
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Simple validation check
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                if (email.length < 5 || password.length < 5) {
+                    loginMessage.textContent = 'Invalid credentials or too short.';
+                    loginMessage.classList.remove('text-green-500', 'opacity-0');
+                    loginMessage.classList.add('text-red-500', 'opacity-100');
+                    setTimeout(() => loginMessage.classList.add('opacity-0'), 2000);
+                    return;
+                }
+
+                // Success simulation
+                loginMessage.textContent = 'Login successful! Redirecting...';
+                loginMessage.classList.remove('text-red-500', 'opacity-0');
+                loginMessage.classList.add('text-green-500', 'opacity-100');
+
+                // Simulate API call delay before launching app
+                setTimeout(launchApp, 500); 
+            });
+
+
+            // --- NEW: Settings Dropdown and Modal Event Listeners ---
+            
+            // 4. Settings button click handler
+            settingsButton.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent the body click listener from immediately closing it
+                toggleDropdown();
+            });
+
+            // 5. About Us link click handler (opens modal)
+            aboutUsLink.addEventListener('click', (e) => {
+                e.preventDefault(); // Stop the link from navigating
+                showModal();
+            });
+
+            // 6. Modal close button handler
+            closeModalButton.addEventListener('click', hideModal);
+
+            // 7. Close modal when clicking outside (on the overlay)
+            aboutUsModal.addEventListener('click', (e) => {
+                if (e.target === aboutUsModal) {
+                    hideModal();
+                }
+            });
+
+            // 8. Global click listener to close dropdown when clicking anywhere else
+            document.addEventListener('click', (e) => {
+                if (isDropdownOpen && !settingsButton.contains(e.target) && !settingsDropdown.contains(e.target)) {
+                    toggleDropdown();
+                }
+            });
+            // --- END NEW EVENT LISTENERS ---
+
+
+            // --- In-App Content Logic ---
+
+            // Mock messages data
+            const channelMessages = {
+                'Command Channel': [
+                    { user: 'KRISH', text: "Welcome to the Command Channel. Use the sidebar to navigate.", isAI: true },
+                    { user: 'User', text: "Run diagnostic on sector 7G.", isAI: false },
+                    { user: 'KRISH', text: "Diagnostic request accepted. Please wait for system confirmation.", isAI: true },
+                ],
+                'K-Channel': [
+                    { user: 'KRISH', text: "K-Channel activated. Focus: Knowledge retrieval.", isAI: true },
+                    { user: 'User', text: "What is the capital of Japan?", isAI: false },
+                    { user: 'KRISH', text: "Tokyo.", isAI: true },
+                ],
+                'R-Channel': [
+                    { user: 'KRISH', text: "R-Channel activated. Focus: Resource allocation.", isAI: true },
+                ]
+            };
+
+            const messagesContainer = document.getElementById('messages-container');
+            const currentChannelNameEl = document.getElementById('current-channel-name');
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            const chatView = document.getElementById('chat-view');
+            const teamView = document.getElementById('team-view');
+            const activityView = document.getElementById('activity-view');
+            const settingsView = document.getElementById('settings-view');
+            const viewsMap = { 'chat-view': chatView, 'team-view': teamView, 'activity-view': activityView, 'settings-view': settingsView };
+            
+            /** Renders messages for the current channel. */
+            function loadChannel(channelName) {
+                messagesContainer.innerHTML = '';
+                currentChannelNameEl.textContent = channelName;
+                const messages = channelMessages[channelName] || [];
+
+                messages.forEach(msg => {
+                    const messageEl = document.createElement('div');
+                    messageEl.className = 'flex';
+                    
+                    const bubble = document.createElement('div');
+                    bubble.textContent = msg.text;
+                    bubble.className = 'message-bubble transition-all duration-300 transform ' + (msg.isAI ? 'ai-message' : 'user-message');
+                    
+                    messageEl.appendChild(bubble);
+                    messageEl.classList.add(msg.isAI ? 'justify-start' : 'justify-end');
+
+                    messagesContainer.appendChild(messageEl);
+                });
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
 
-            // Activate clicked item and update channel name
-            if (clickedItem) {
-                clickedItem.classList.add('active');
-                
-                const channelName = clickedItem.getAttribute('data-channel-name');
-                currentChannelNameEl.textContent = channelName || clickedItem.getAttribute('title');
-                currentChannelName = channelName || clickedItem.getAttribute('title'); // Update global state
-                
-                // Load chat history if it's a chat view
+            /** Switches the main right-side panel based on sidebar click. */
+            function switchAppView(viewId) {
+                // Hide all main views
+                Object.values(viewsMap).forEach(view => view.classList.add('hidden'));
+
+                // Show the target view
+                const targetView = viewsMap[viewId];
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                }
+
+                // If switching to a chat view, load the channel content
                 if (viewId === 'chat-view') {
-                    loadChannel(currentChannelName);
-                }
-
-
-                // Load content for other views
-                if (viewId === 'activity-view') {
-                    const contentArea = activityView.querySelector('#activity-content');
-                    if (contentArea) {
-                        contentArea.innerHTML = `
-                            <div class="w-full max-w-lg p-8 rounded-xl bg-gray-800 border border-green-500/50 shadow-2xl">
-                                <h2 class="text-3xl font-bold text-green-400 mb-4 flex items-center justify-center space-x-3">
-                                    <span class="text-4xl">✅</span>
-                                    <span>System Health Report</span>
-                                </h2>
-                                <div class="text-center space-y-3">
-                                    <p class="text-xl font-semibold text-white">All logs checked, no jobs pending.</p>
-                                    <p class="text-sm text-gray-400">Status: Operational (100% efficiency)</p>
-                                    <p class="text-xs text-gray-500 mt-2">Last updated: ${new Date().toLocaleTimeString()}</p>
-                                </div>
-                            </div>
-                        `;
+                    const activeItem = document.querySelector('.sidebar-item.active');
+                    if (activeItem) {
+                        loadChannel(activeItem.dataset.channelName);
+                    } else {
+                        // Fallback to default
+                        loadChannel('Command Channel');
                     }
+                } else if (viewId === 'activity-view') {
+                    document.getElementById('activity-content').innerHTML = `
+                        <div class="text-gray-400 space-y-4">
+                            <p class="text-xl font-medium text-green-400">Activity Log is Clean</p>
+                            <p>No critical system alerts or recent user activities to report.</p>
+                            <div class="text-6xl">✨</div>
+                        </div>
+                    `;
                 }
             }
-        };
 
-        const initializeApp = () => {
-            // 1. Attach listeners
-            if (loginBtn) {
-                 loginBtn.addEventListener('click', showLoginForm);
-            } else {
-                console.error("Critical Error: Login button element not found!");
-            }
-            
-            goBackBtn.addEventListener('click', showLandingPage);
-            loginForm.addEventListener('submit', handleLogin);
-            messageForm.addEventListener('submit', handleMessageSend);
-            logoutButton.addEventListener('click', logOut);
-            
-            // 2. Sidebar Navigation Listeners
+            // Sidebar item click handler
             sidebarItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const viewId = e.currentTarget.getAttribute('data-view');
-                    if (viewId) {
-                        switchAppView(viewId, e.currentTarget);
-                    }
+                item.addEventListener('click', () => {
+                    const viewId = item.dataset.view;
+
+                    // Update active state in sidebar
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // Switch the main content view
+                    switchAppView(viewId);
                 });
             });
 
-            // 3. Initial state setup
-            loadChannel("Command Channel");
-            loggedInUsernameEl.textContent = 'Guest';
-        };
+            // Initial load of the chat view (Command Channel)
+            loadChannel('Command Channel');
+            switchAppView('chat-view'); // Ensure chat-view is the default main panel
 
-        window.onload = initializeApp;
+            // Handle sending mock message
+            document.getElementById('message-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = document.getElementById('message-input');
+                const text = input.value.trim();
+                
+                if (text) {
+                    // Add user message
+                    channelMessages[currentChannelNameEl.textContent].push({ user: 'User', text: text, isAI: false });
+                    
+                    // Simulate KRISH AI response
+                    setTimeout(() => {
+                        channelMessages[currentChannelNameEl.textContent].push({ user: 'KRISH', text: `Acknowledged: "${text}". Processing request...`, isAI: true });
+                        loadChannel(currentChannelNameEl.textContent);
+                    }, 500);
+                    
+                    // Reload to show user message immediately
+                    loadChannel(currentChannelNameEl.textContent);
+                    input.value = ''; // Clear input
+                }
+            });
 
+            // Logout Handler
+            document.getElementById('logout-button').addEventListener('click', () => {
+                isLoggedIn = false;
+                document.getElementById('nav-links').style.display = 'flex';
+                body.classList.remove('bg-gray-800');
+                body.classList.add('from-gray-900', 'to-blue-900');
+                setView(VIEWS.LANDING);
+            });
+        });
     </script>
 </body>
 </html>
