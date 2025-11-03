@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRISH - Welcome</title>
+    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for Inter font --><script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Apply the Inter font and ensure no overflow during transitions */
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            /* Default landing page gradient */
+            transition: background-color 1s ease-in-out; 
+        }
+        
+        /* Transition for content fading/sliding */
+        #landing-content, #login-form-container, #chat-app-container {
+            transition: all 1s ease-in-out;
+        }
+
+        /* Message bubbles styling for mock chat */
+        .message-bubble {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 1rem;
+            margin-bottom: 6px; /* TIGHTENED SPACING */
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            background-color: #2e7d32; /* Darker green */
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .ai-message {
+            background-color: #374151; /* Gray/Black */
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Styling for sidebar navigation items */
+        .sidebar-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s; /* Add box-shadow for glow */
+            color: #4ade80; /* text-green-400 for icons */
+            font-size: 1.25rem; /* text-xl */
+        }
+        .sidebar-item:hover {
+            background-color: #1e293b; /* gray-800 */
+            transform: scale(1.1); /* Animate on hover */
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.6); /* Green glow on hover */
+        }
+        .sidebar-item.active {
+            background-color: #22c55e; /* green-500 */
+            color: #1f2937; /* gray-800 */
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(74, 222, 128, 0.8); /* Persistent green glow for active */
+        }
+        /* Smaller top bar padding */
+        .chat-header {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        /* Style for the user avatars in the team list and settings */
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #2e7d32; /* Match user bubble color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            background-color: #f59e0b; /* Amber for prominence */
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+        /* --- CSS for KRISH Logo Loading Animation --- */
+        @keyframes pulse-krish {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        .krish-loader-logo {
+            animation: pulse-krish 1.5s infinite ease-in-out;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.7); /* subtle glow */
+        }
+    </style>
+</head>
+<!-- Initial Background is blue-black gradient --><body class="min-h-screen flex flex-col text-white bg-gradient-to-br from-gray-900 to-blue-900">
+
+    <!-- 2. Header / Navigation (Visible on Landing/Login) --><header id="app-header" class="relative z-30 p-4 md:p-6 w-full">
+        <nav class="flex justify-between items-center max-w-7xl mx-auto">
+            
+            <!-- Logo (Top Left) --><a href="#" id="krish-logo" class="text-3xl font-extrabold tracking-widest text-indigo-400 hover:text-indigo-300 transition duration-300 transform">
+                KRISH
+            </a>
+
+            <!-- Navigation Links (Center to Right) --><div id="nav-links" class="flex items-center space-x-4 sm:space-x-8 transition-opacity duration-500">
+                
+                <!-- Inactive Links --><a href="#" class="text-lg font-medium text-gray-300 hover:text-white transition duration-200 opacity-70 cursor-not-allowed hidden sm:block">
+                    About Us
+                </a>
+                <a href="#" class="text-lg font-medium text-gray-300 hover:text-white transition duration-200 opacity-70 cursor-not-allowed hidden sm:block">
+                    Features
+                </a>
+
+                <!-- Active Login Button (Top Right) --><button id="login-button" class="px-5 py-2 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-xl hover:bg-indigo-700 transition duration-300 transform hover:scale-105 active:scale-95">
+                    Login
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 3. Main Content Containers --><div class="flex-grow flex items-center justify-center relative">
+        
+        <!-- Landing Page Content: Motivational Quote (Visible by default) --><main id="landing-content" class="relative z-10 flex flex-grow items-center justify-center p-6 w-full opacity-100">
+            <div class="text-center max-w-4xl">
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight">
+                    "The world is ruled by power, and power is obtained by money."
+                </h1>
+            </div>
+        </main>
+
+        <!-- Login Form: Hidden by default. Added 'hidden' for robust start state. --><section id="login-form-container" class="absolute inset-0 z-20 flex items-center justify-center p-4 opacity-0 pointer-events-none translate-y-full hidden">
+            <div class="w-full max-w-md bg-gray-800/80 backdrop-blur-md p-8 rounded-xl shadow-2xl border border-indigo-700/50">
+                <h2 class="text-3xl font-bold text-center text-indigo-400 mb-6">Welcome Back</h2>
+                <form id="login-form">
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email/Username</label>
+                        <input type="text" id="email" name="email" required 
+                               class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-white placeholder-gray-400">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                        <input type="password" id="password" name="password" required 
+                               class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-white placeholder-gray-400">
+                    </div>
+                    
+                    <!-- Validation Message Display Area --><div id="login-message" class="text-center h-5 mb-4 font-semibold transition-opacity duration-300 opacity-0"></div>
+
+                    <button type="submit" class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-[1.01]">
+                        Sign In
+                    </button>
+                </form>
+                <p class="mt-6 text-center text-sm text-gray-400">
+                    <!-- "Go Back" button inside the form --><button id="go-back-button" class="text-indigo-400 hover:text-indigo-300 font-medium underline">Go Back to Landing Page</button>
+                </p>
+            </div>
+        </section>
+
+        <!-- Loading Screen Overlay --><section id="loading-overlay" class="absolute inset-0 z-40 bg-gray-900 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-500">
+            <div class="text-center">
+                <h1 class="text-6xl font-extrabold tracking-widest text-indigo-400 krish-loader-logo">
+                    KRISH
+                </h1>
+                <p class="text-sm text-gray-400 mt-2 tracking-wider">Establishing secure connection...</p>
+            </div>
+        </section>
+
+        <!-- 4. Chat Application Interface (Hidden by default) --><section id="chat-app-container" class="hidden absolute inset-0 w-full h-full flex opacity-0 transition-opacity duration-1000">
+            
+            <!-- Left Sidebar Navigation --><div id="sidebar-nav" class="w-20 bg-gray-900 flex-shrink-0 flex flex-col items-center py-4 space-y-4 shadow-2xl border-r border-green-700/30">
+                
+                <!-- Chat View Button (data-view used for JS switching) -->
+                <div class="sidebar-item active" data-view="chat-view" data-channel-name="Command Channel" title="Command Channel">
+                    <span>🗨️</span>
+                </div>
+                <!-- Activity View Button -->
+                <div class="sidebar-item" data-view="activity-view" title="Activity">
+                    <span>🔔</span>
+                </div>
+                <!-- Team View Button -->
+                <div class="sidebar-item" data-view="team-view" title="Team">
+                    <span>👥</span>
+                </div>
+                <!-- Settings View Button -->
+                <div class="sidebar-item" data-view="settings-view" title="Settings">
+                    <span>⚙️</span>
+                </div>
+                
+                <!-- Separator --><div class="h-px w-1/2 bg-gray-700"></div>
+
+                <!-- Channels/Teams Placeholder (smaller to distinguish from main icons) -->
+                <div class="sidebar-item text-sm text-green-400 opacity-70 hover:opacity-100 hover:scale-110 hover:shadow-none" data-view="chat-view" data-channel-name="K-Channel" title="K-Channel">
+                    K
+                </div>
+                <div class="sidebar-item text-sm text-indigo-400 opacity-70 hover:opacity-100 hover:scale-110 hover:shadow-none" data-view="chat-view" data-channel-name="R-Channel" title="R-Channel">
+                    R
+                </div>
+            </div>
+
+            <!-- Right Side: Content Area (Dynamically changes based on sidebar click) --><div class="flex-grow flex flex-col min-w-0">
+                
+                <!-- CHAT VIEW (Initial App View) -->
+                <div id="chat-view" class="flex-grow flex flex-col">
+                    <!-- Chat Header (Smaller padding) --><div class="chat-header p-3 flex justify-between items-center bg-gray-800 shadow-lg z-30">
+                        <div class="text-xl font-bold text-green-400">
+                            <span class="text-indigo-400" id="app-name-prefix">KRISH</span> <span id="current-channel-name">Command Channel</span>
+                        </div>
+                        
+                        <!-- Added Logout Button -->
+                        <div class="flex items-center space-x-4">
+                            <div class="text-sm text-gray-400 hidden sm:block">
+                                Welcome, <span id="logged-in-username">User</span>!
+                            </div>
+                            <button id="logout-button" class="px-3 py-1 bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300 transform hover:scale-105 active:scale-95">
+                                Log Out
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Message Area --><div id="messages-container" class="flex-grow overflow-y-auto p-4 md:p-8 flex flex-col space-y-2 bg-gray-900/50">
+                        <!-- Messages will be injected here by JavaScript loadChannel function -->
+                    </div>
+
+                    <!-- Message Input Area --><div class="p-4 bg-gray-800/90 border-t border-green-700/50 shadow-inner z-30">
+                        <form id="message-form" class="flex space-x-3">
+                            <input type="text" id="message-input" placeholder="Type your command..." required
+                                class="flex-grow px-4 py-3 bg-gray-700 border border-green-600 rounded-full focus:ring-green-500 focus:border-green-500 text-white placeholder-gray-400">
+                            <button type="submit" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-full hover:bg-green-700 transition duration-300 transform hover:scale-105 active:scale-95">
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TEAM VIEW (Initially Hidden) -->
+                <div id="team-view" class="hidden flex-grow flex-col bg-gray-900/50">
+                    
+                    <!-- Team Header (Mimics image style) --><div class="p-3 flex justify-between items-center bg-gray-800 shadow-lg z-30 chat-header">
+                        <h1 class="text-2xl font-extrabold text-white">Party List</h1>
+                        <div class="flex space-x-4 text-green-400 text-xl">
+                            <span title="Notifications">🔔</span>
+                            <span title="Search">🔍</span>
+                            <span title="Add Member">+</span>
+                        </div>
+                    </div>
+
+                    <!-- Team List Content --><div class="flex-grow overflow-y-auto">
+                        
+                        <div class="p-4 space-y-2">
+                            <!-- Team Member Cards are kept as placeholders/mock-up -->
+                            <div class="flex items-center justify-between p-3 bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200 cursor-pointer">
+                                <div class="flex items-center space-x-4">
+                                    <div class="user-avatar bg-indigo-600">AB</div>
+                                    <div>
+                                        <div class="text-lg font-semibold">USER 1 </div>
+                                        <div class="text-xs text-gray-400">Last seen: 2 hours ago</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400 font-medium">
+                                    Nov 1, 2025
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200 cursor-pointer">
+                                <div class="flex items-center space-x-4">
+                                    <div class="user-avatar bg-green-600">P</div>
+                                    <div>
+                                        <div class="text-lg font-semibold">peps1234egf</div>
+                                        <div class="text-xs text-gray-400">Active now</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400 font-medium">
+                                    Nov 1, 2025
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200 cursor-pointer">
+                                <div class="flex items-center space-x-4">
+                                    <div class="user-avatar bg-red-600">K</div>
+                                    <div>
+                                        <div class="text-lg font-semibold">USER 2 </div>
+                                        <div class="text-xs text-green-400">Online</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400 font-medium">
+                                    Oct 30, 2025
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200 cursor-pointer">
+                                <div class="flex items-center space-x-4">
+                                    <div class="user-avatar bg-yellow-600">L</div>
+                                    <div>
+                                        <div class="text-lg font-semibold">USER 3 </div>
+                                        <div class="text-xs text-gray-400">Offline</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400 font-medium">
+                                    Oct 30, 2025
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gray-900 rounded-xl hover:bg-gray-800 transition duration-200 cursor-pointer">
+                                <div class="flex items-center space-x-4">
+                                    <div class="user-avatar bg-gray-500">G</div>
+                                    <div>
+                                        <div class="text-lg font-semibold">GODx_Mayu</div>
+                                        <div class="text-xs text-gray-400">Party started</div>
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-400 font-medium">
+                                    Oct 27, 2025
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTIVITY VIEW (Placeholder) -->
+                <div id="activity-view" class="hidden flex-grow flex-col bg-gray-900/50">
+                    <div class="p-3 flex justify-center items-center bg-gray-800 shadow-lg z-30 chat-header">
+                        <h1 class="text-2xl font-extrabold text-white" id="activity-header">Activity Log</h1>
+                    </div>
+                    <div id="activity-content" class="flex-grow flex items-center justify-center text-center p-8">
+                        <!-- Content will be injected by JS -->
+                    </div>
+                </div>
+
+                <!-- SETTINGS VIEW (IMPLEMENTED) -->
+                <div id="settings-view" class="hidden flex-grow flex-col bg-gray-900/50">
+                    <div class="p-3 flex justify-center items-center bg-gray-800 shadow-lg z-30 chat-header">
+                        <h1 class="text-2xl font-extrabold text-white" id="settings-header">System Settings</h1>
+                    </div>
+                    <div id="settings-content" class="flex-grow overflow-y-auto p-4 md:p-8 space-y-8">
+                        
+                        <!-- Profile Settings -->
+                        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-indigo-700/50">
+                            <h3 class="text-xl font-bold text-indigo-400 mb-4 text-center">Profile</h3>
+
+                            <!-- Dynamic Avatar -->
+                            <div id="profile-avatar" class="user-avatar profile-avatar mb-6">?</div>
+
+                            <h3 class="text-lg font-semibold text-center text-white mb-6" id="settings-display-name">Guest</h3>
+                            
+                            <div class="space-y-4">
+                                
+                                <!-- Admin ID -->
+                                <div class="flex items-center justify-between border-b border-gray-700 pb-3">
+                                    <label class="text-gray-300">Admin ID</label>
+                                    <span class="text-sm text-red-400 font-mono" id="settings-admin-id">---</span>
+                                </div>
+
+                                <!-- Occupation -->
+                                <div class="flex items-center justify-between border-b border-gray-700 pb-3">
+                                    <label class="text-gray-300">Occupation</label>
+                                    <span class="text-white font-medium text-right" id="settings-occupation">---</span>
+                                </div>
+
+                                <!-- Level -->
+                                <div class="flex items-center justify-between pb-3">
+                                    <label class="text-gray-300">Level</label>
+                                    <span class="text-green-400 font-medium text-right" id="settings-level">---</span>
+                                </div>
+                                
+                                <!-- Change Password -->
+                                <button class="w-full py-2 bg-indigo-600/70 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300">
+                                    Change Password (Mock)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Appearance Settings -->
+                        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-green-700/50">
+                            <h3 class="text-xl font-bold text-green-400 mb-4">Appearance</h3>
+                            <div class="space-y-4">
+
+                                <!-- Dark Mode Toggle -->
+                                <div class="flex items-center justify-between">
+                                    <label class="text-gray-300">Dark Mode (Default)</label>
+                                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <!-- Mock Toggle Switch (Always ON for this app) -->
+                                        <input type="checkbox" name="toggle" id="darkModeToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer checked:right-0 checked:bg-green-500 checked:border-green-500" checked disabled>
+                                        <label for="darkModeToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-600 cursor-pointer"></label>
+                                    </div>
+                                </div>
+
+                                <!-- Notification Sounds Toggle -->
+                                <div class="flex items-center justify-between">
+                                    <label class="text-gray-300">Notification Sounds</label>
+                                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <!-- Mock Toggle Switch -->
+                                        <input type="checkbox" name="toggle" id="soundToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked>
+                                        <label for="soundToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-600 cursor-pointer"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System & Security -->
+                        <div class="bg-gray-800 rounded-xl p-6 shadow-xl border border-red-700/50">
+                            <h3 class="text-xl font-bold text-red-400 mb-4">System & Data</h3>
+                            <div class="space-y-4">
+                                
+                                <!-- Two-Factor Authentication Status -->
+                                <div class="flex items-center justify-between border-b border-gray-700 pb-3">
+                                    <label class="text-gray-300">Two-Factor Auth</label>
+                                    <span class="text-green-500 font-bold">Enabled (Mock)</span>
+                                </div>
+                                
+                                <!-- Logout All Devices -->
+                                <button class="w-full py-2 bg-red-600/70 text-white font-semibold rounded-lg hover:bg-red-700 transition duration-300">
+                                    Logout All Devices (Mock)
+                                </button>
+
+                                <!-- Clear Local Cache -->
+                                <button class="w-full py-2 border border-gray-600 text-gray-400 font-semibold rounded-lg hover:bg-gray-700 transition duration-300">
+                                    Clear Local Cache (Mock)
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Application Logic (All Client-Side) -->
+    <script>
+        // --- UI ELEMENT REFERENCES ---
+        const loginBtn = document.getElementById('login-button');
+        const appHeader = document.getElementById('app-header');
+        const landingContent = document.getElementById('landing-content');
+        const loginFormContainer = document.getElementById('login-form-container');
+        const goBackBtn = document.getElementById('go-back-button');
+        const loggedInUsernameEl = document.getElementById('logged-in-username');
+
+        // Login Logic Elements
+        const loginForm = document.getElementById('login-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginMessage = document.getElementById('login-message');
+        
+        // Loading Overlay
+        const loadingOverlay = document.getElementById('loading-overlay');
+
+        // Chat App Elements
+        const chatAppContainer = document.getElementById('chat-app-container');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageForm = document.getElementById('message-form');
+        const messageInput = document.getElementById('message-input');
+        const currentChannelNameEl = document.getElementById('current-channel-name');
+        const logoutButton = document.getElementById('logout-button');
+
+        // View Elements and Sidebar Items
+        const chatView = document.getElementById('chat-view');
+        const teamView = document.getElementById('team-view');
+        const activityView = document.getElementById('activity-view');
+        const settingsView = document.getElementById('settings-view');
+        const sidebarItems = document.querySelectorAll('#sidebar-nav .sidebar-item');
+
+        // Settings Elements for dynamic update
+        const profileAvatarEl = document.getElementById('profile-avatar');
+        const settingsDisplayNameEl = document.getElementById('settings-display-name');
+        const settingsAdminIdEl = document.getElementById('settings-admin-id'); 
+        const settingsOccupationEl = document.getElementById('settings-occupation'); 
+        const settingsLevelEl = document.getElementById('settings-level'); 
+
+        // --- STATE MANAGEMENT ---
+        const CHANNEL_AI = "K-Channel";
+        let currentChannelName = "Command Channel";
+        // Simple chat history storage for each channel
+        const chatHistory = {
+            "Command Channel": [{ role: 'ai', text: 'Welcome to the Command Console. Please authenticate using the login button to begin operations.' }],
+            // UPDATED INITIAL MESSAGE with line breaks (\n)
+            [CHANNEL_AI]: [{ role: 'ai', text: 'K-Channel AI is currently offline due to maintenance.\nI can only provide mock responses.\nAdvice KRISH System: The previous message is OK.' }],
+            "R-Channel": []
+        };
+        
+        // --- AUTH/DISPLAY CONSTANTS (MOCK DATA) ---
+        const USER_PROFILES = {
+            '1karthikthebest': { 
+                username: '1karthikthebest', 
+                password: '9620373944', 
+                displayName: 'KING KRISH', 
+                adminId: '1769584',
+                occupation: 'student, C3B', 
+                level: 'owner, admin, commander'
+            },
+            'ADMIN_KRISH': { username: 'ADMIN_KRISH', password: '1769584', displayName: 'ADMIN', adminId: '0000000', occupation: 'System Operator', level: 'admin' }
+        };
+        let currentProfile = null;
+
+
+        // --- UTILITY FUNCTIONS ---
+
+        // Function to get initials from a display name
+        const getInitials = (name) => {
+            if (!name) return '?';
+            const parts = name.split(/\s+/).filter(Boolean); 
+            if (parts.length > 1) {
+                return parts[0][0] + parts[parts.length - 1][0];
+            } else if (parts.length === 1) {
+                return parts[0].substring(0, 2);
+            }
+            return '?';
+        };
+
+        // Function to display a message
+        const displayMessage = (role, text) => {
+            const messageEl = document.createElement('div');
+            // Using the .message-bubble CSS style with reduced margin-bottom
+            messageEl.className = `message-bubble ${role === 'user' ? 'user-message self-end' : 'ai-message self-start'}`;
+            
+            // REMOVED 'pt-1' from the paragraph to reduce spacing
+            messageEl.innerHTML = `
+                <div class="text-xs ${role === 'user' ? 'text-right' : 'text-left'} text-gray-300 font-medium">${role === 'user' ? currentProfile.displayName : 'KRISH System'} · Now</div>
+                <p class="text-base mt-0">${text}</p> 
+            `;
+
+            messagesContainer.appendChild(messageEl);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+
+        // Function to load chat history for the current channel
+        const loadChannel = (channelName) => {
+            messagesContainer.innerHTML = '';
+            const history = chatHistory[channelName] || [];
+            
+            history.forEach(msg => {
+                displayMessage(msg.role, msg.text);
+            });
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // --- CORE UI STATE FUNCTIONS ---
+
+        // Logic to transition from Landing Page to Login Form (ROBUST FIX)
+        const showLoginForm = () => {
+            // 1. Start fading out landing content
+            landingContent.classList.remove('opacity-100');
+            landingContent.classList.add('opacity-0', 'pointer-events-none');
+            
+            // 2. Make the login container visible in the layout but keep it invisible/off-screen
+            loginFormContainer.classList.remove('hidden');
+            loginFormContainer.classList.remove('pointer-events-none'); // Make it interactive
+            
+            // --- CRITICAL: FORCE REFLOW (Browser registers that 'hidden' is gone) ---
+            loginFormContainer.offsetHeight; 
+
+            // 3. Trigger the full CSS transition (fade-in and slide-up)
+            loginFormContainer.classList.remove('opacity-0', 'translate-y-full');
+            loginFormContainer.classList.add('opacity-100');
+
+            // 4. Cleanup
+            loginMessage.classList.remove('opacity-100', 'text-green-400', 'text-red-400');
+            loginMessage.textContent = '';
+            loginForm.reset();
+
+            // 5. Finally, hide the landing content completely after it's faded out
+            setTimeout(() => {
+                landingContent.classList.add('hidden');
+            }, 1000); // Wait for the 1s transition to finish
+        };
+
+        // Logic to transition from Login Form back to Landing Page
+        const showLandingPage = () => {
+            loginFormContainer.classList.remove('opacity-100');
+            loginFormContainer.classList.add('opacity-0', 'translate-y-full', 'pointer-events-none');
+
+            setTimeout(() => {
+                // Ensure form is completely hidden after transition
+                loginFormContainer.classList.add('hidden');
+                
+                // Show the landing content
+                landingContent.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+                landingContent.classList.add('opacity-100');
+            }, 1000); 
+        };
+        
+        // Function to start the loading animation sequence
+        const startLoadingTransition = () => {
+            // 1. Hide the login form completely
+            loginFormContainer.classList.remove('opacity-100');
+            loginFormContainer.classList.add('opacity-0', 'translate-y-full', 'pointer-events-none');
+
+            // 2. Show the loading overlay immediately and put it on top (z-40)
+            loadingOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            loadingOverlay.classList.add('opacity-100');
+            
+            // 3. Set a timer for the loading duration (2000ms for animation + 500ms fade)
+            const loadingDuration = 2000;
+            
+            setTimeout(() => {
+                // Start fading out the loader
+                loadingOverlay.classList.remove('opacity-100');
+                loadingOverlay.classList.add('opacity-0');
+
+                // After the fade-out duration (500ms from CSS transition), show the chat app
+                setTimeout(showChatApp, 500); 
+            }, loadingDuration);
+        };
+
+        // Logic to transition from Successful Login/Loading to Chat App
+        const showChatApp = () => {
+            if (!currentProfile) {
+                console.error("Attempted to show app without a profile.");
+                return;
+            }
+            
+            // 1. Hide the loading overlay completely after transition
+            loadingOverlay.classList.add('pointer-events-none');
+            loadingOverlay.classList.add('hidden'); // Ensure it's hidden after fade
+
+            // 2. Update the background, header visibility, and username
+            loggedInUsernameEl.textContent = currentProfile.displayName;
+            appHeader.classList.add('hidden'); // Hide the main header/logo
+            document.body.classList.remove('to-blue-900'); 
+            document.body.classList.add('to-green-900');
+
+            // 3. Update settings profile data dynamically
+            profileAvatarEl.textContent = getInitials(currentProfile.displayName); // Set Avatar Initials
+            settingsDisplayNameEl.textContent = currentProfile.displayName;
+            settingsAdminIdEl.textContent = currentProfile.adminId || 'N/A';
+            settingsOccupationEl.textContent = currentProfile.occupation || 'N/A';
+            settingsLevelEl.textContent = currentProfile.level || 'N/A';
+            
+            // 4. Show the main app container
+            chatAppContainer.classList.remove('hidden', 'opacity-0');
+            chatAppContainer.classList.add('opacity-100');
+            
+            // 5. Set the default active view and content
+            const defaultItem = document.querySelector('[data-channel-name="Command Channel"]');
+            switchAppView('chat-view', defaultItem);
+        };
+
+        // Logic to transition from Chat App back to Landing Page (Logout)
+        const logOut = () => {
+            currentProfile = null;
+            
+            chatAppContainer.classList.remove('opacity-100');
+            chatAppContainer.classList.add('opacity-0');
+
+            document.body.classList.remove('to-green-900');
+            document.body.classList.add('to-blue-900');
+
+            setTimeout(() => {
+                chatAppContainer.classList.add('hidden'); 
+                appHeader.classList.remove('hidden'); // SHOW HEADER AGAIN
+                
+                // Ensure landing content is visible before setting opacity to 1
+                landingContent.classList.remove('hidden', 'pointer-events-none'); 
+                landingContent.classList.add('opacity-100');
+                
+                // Reset settings placeholders
+                profileAvatarEl.textContent = '?';
+                settingsDisplayNameEl.textContent = 'Guest';
+                settingsAdminIdEl.textContent = '---';
+                settingsOccupationEl.textContent = '---';
+                settingsLevelEl.textContent = '---';
+                
+                // Re-initialize chat view to landing state
+                loadChannel("Command Channel");
+                
+            }, 1000); 
+        };
+
+        // --- HANDLERS ---
+
+        // Function to handle login submission validation (Mocked)
+        const handleLogin = (e) => {
+            e.preventDefault(); 
+
+            const enteredUsername = emailInput.value.trim();
+            const enteredPassword = passwordInput.value.trim();
+
+            loginMessage.classList.remove('opacity-100', 'text-green-400', 'text-red-400');
+            loginMessage.textContent = ''; 
+            currentProfile = null;
+
+            for (const key in USER_PROFILES) {
+                const profile = USER_PROFILES[key];
+                // Check against username and password
+                if (profile.username === enteredUsername && profile.password === enteredPassword) {
+                    currentProfile = profile;
+                    break;
+                }
+            }
+            
+            if (currentProfile) {
+                loginMessage.textContent = `SUCCESS: Authenticated as ${currentProfile.displayName}`;
+                loginMessage.classList.add('text-green-400', 'opacity-100');
+                
+                setTimeout(startLoadingTransition, 500); 
+            } else {
+                loginMessage.textContent = 'INCORRECT USERNAME OR PASSWORD';
+                loginMessage.classList.add('text-red-400', 'opacity-100');
+            }
+        };
+        
+        // Function to handle message sending and mock responses (API removed)
+        const handleMessageSend = async (e) => {
+            e.preventDefault();
+            const messageText = messageInput.value.trim();
+            if (!messageText || !currentProfile) return;
+            
+            // Disable input while processing
+            messageInput.disabled = true;
+            document.querySelector('#message-form button').disabled = true;
+
+            // 1. Display User Message
+            const userMsg = { role: 'user', text: messageText };
+            chatHistory[currentChannelName].push(userMsg);
+            displayMessage(userMsg.role, userMsg.text);
+            messageInput.value = '';
+
+            // 2. Generate Mock Response
+            let mockResponse;
+            if (currentChannelName === "Command Channel") {
+                mockResponse = `Command received: "${messageText}". **Command Console** executed successfully: System health check returned OK.`;
+            } else if (currentChannelName === CHANNEL_AI) {
+                // UPDATED MOCK RESPONSE with line breaks
+                mockResponse = `K-Channel AI is currently offline due to maintenance.\nI can only provide mock responses.\nAdvice KRISH System: The previous message is OK.\nYour query "${messageText}" has been logged for processing when I return.`;
+            } else if (currentChannelName === "R-Channel") {
+                mockResponse = `Message sent to R-Channel: "${messageText}". Relay confirmed. Waiting for team response...`;
+            } else {
+                mockResponse = `Mock response for channel ${currentChannelName}.`;
+            }
+
+            // 3. Display AI Mock Response
+            setTimeout(() => {
+                 const aiMsg = { role: 'ai', text: mockResponse };
+                 chatHistory[currentChannelName].push(aiMsg);
+                 displayMessage(aiMsg.role, aiMsg.text);
+
+                 // Re-enable input
+                messageInput.disabled = false;
+                document.querySelector('#message-form button').disabled = false;
+                messageInput.focus();
+            }, 1000);
+            
+            
+        };
+
+        // --- VIEW SWITCHING LOGIC ---
+
+        const switchAppView = (viewId, clickedItem) => {
+            const allViews = [chatView, teamView, activityView, settingsView];
+            
+            // Hide all views
+            allViews.forEach(view => {
+                view.classList.add('hidden');
+                view.classList.remove('flex', 'flex-col');
+            });
+
+            // Deactivate all sidebar items
+            sidebarItems.forEach(item => item.classList.remove('active'));
+
+            // Show target view
+            const targetView = document.getElementById(viewId);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('flex', 'flex-col');
+            }
+
+            // Activate clicked item and update channel name
+            if (clickedItem) {
+                clickedItem.classList.add('active');
+                
+                const channelName = clickedItem.getAttribute('data-channel-name');
+                currentChannelNameEl.textContent = channelName || clickedItem.getAttribute('title');
+                currentChannelName = channelName || clickedItem.getAttribute('title'); // Update global state
+                
+                // Load chat history if it's a chat view
+                if (viewId === 'chat-view') {
+                    loadChannel(currentChannelName);
+                }
+
+
+                // Load content for other views
+                if (viewId === 'activity-view') {
+                    const contentArea = activityView.querySelector('#activity-content');
+                    if (contentArea) {
+                        contentArea.innerHTML = `
+                            <div class="w-full max-w-lg p-8 rounded-xl bg-gray-800 border border-green-500/50 shadow-2xl">
+                                <h2 class="text-3xl font-bold text-green-400 mb-4 flex items-center justify-center space-x-3">
+                                    <span class="text-4xl">✅</span>
+                                    <span>System Health Report</span>
+                                </h2>
+                                <div class="text-center space-y-3">
+                                    <p class="text-xl font-semibold text-white">All logs checked, no jobs pending.</p>
+                                    <p class="text-sm text-gray-400">Status: Operational (100% efficiency)</p>
+                                    <p class="text-xs text-gray-500 mt-2">Last updated: ${new Date().toLocaleTimeString()}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        };
+
+        const initializeApp = () => {
+            // 1. Attach listeners
+            if (loginBtn) {
+                 loginBtn.addEventListener('click', showLoginForm);
+            } else {
+                console.error("Critical Error: Login button element not found!");
+            }
+            
+            goBackBtn.addEventListener('click', showLandingPage);
+            loginForm.addEventListener('submit', handleLogin);
+            messageForm.addEventListener('submit', handleMessageSend);
+            logoutButton.addEventListener('click', logOut);
+            
+            // 2. Sidebar Navigation Listeners
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const viewId = e.currentTarget.getAttribute('data-view');
+                    if (viewId) {
+                        switchAppView(viewId, e.currentTarget);
+                    }
+                });
+            });
+
+            // 3. Initial state setup
+            loadChannel("Command Channel");
+            loggedInUsernameEl.textContent = 'Guest';
+        };
+
+        window.onload = initializeApp;
+
+    </script>
+</body>
+</html>
+
